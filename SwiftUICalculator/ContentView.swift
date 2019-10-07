@@ -10,41 +10,54 @@ import SwiftUI
 
 struct ContentView: View {
     
+    let scale: CGFloat = UIScreen.main.bounds.width / 414
     
     var body: some View {
         VStack (spacing: 12) {
             Spacer()
             Text("0")
                 .font(.system(size: 76))
+                .lineLimit(1)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 24)
             CalculatorButtonPad()
-                .padding(.bottom)
-        }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+//                .padding(.bottom)
+        }.scaleEffect(scale)
     }
 }
 
 struct CalculatorButton: View {
     let fontSize: CGFloat = 38
     let title: String
+    let foregroundColorName: String?
     let backgroundColorName: String
     let size: CGSize
     let action :()->Void
     
+    
     var body: some View {
         Button(action: action){
-            Text(title)
-                .font(.system(size: fontSize))
-                .foregroundColor(Color.white)
-                .frame(width: size.width, height: size.height)
-                .background(Color(backgroundColorName))
-                .cornerRadius(size.width / 2)
+//            Text(title)
+//                .font(.system(size: fontSize))
+//                .foregroundColor(foregroundColorName != nil ?  Color(foregroundColorName!) : Color.white)
+//                .frame(width: size.width, height: size.height)
+//                .background(Color(backgroundColorName))
+//                .cornerRadius(size.width / 2)
+            ZStack {
+                if (size.width == size.height) {
+                    Circle()
+                    .frame(width: size.width, height: size.height)
+                    .foregroundColor(Color(backgroundColorName))
+                } else {
+                    Rectangle()
+                    .frame(width: size.width, height: size.height)
+                    .foregroundColor(Color(backgroundColorName))
+                        .cornerRadius(size.width / 2)
+                }
+                Text(title)
+                    .font(.system(size: fontSize))
+                    .foregroundColor(foregroundColorName != nil ?  Color(foregroundColorName!) : Color.white)
+            }
         }
     }
 }
@@ -54,7 +67,7 @@ struct CalculatorButtonRow: View {
     var body: some View {
         HStack {
             ForEach(row, id: \.self) { item in
-                CalculatorButton(title: item.title, backgroundColorName: item.backgroundColorName, size: item.size) {
+                CalculatorButton(title: item.title, foregroundColorName: item.foregroundColorName, backgroundColorName: item.backgroundColorName, size: item.size) {
                     print("Button: \(item.title)")
                 }
             }
@@ -69,6 +82,15 @@ struct CalculatorButtonPad: View {
             ForEach(pad, id: \.self) { item in
                 CalculatorButtonRow(row: item)
             }
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group{
+            ContentView()
+            ContentView().previewDevice("iPhone SE")
         }
     }
 }

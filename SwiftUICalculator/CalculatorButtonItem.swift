@@ -45,9 +45,9 @@ extension CalculatorButtonItem: Hashable {
     
     var size: CGSize {
         if case .digit(let number) = self, number == 0 {
-            return CGSize(width: 80 * 2 + 8, height: 80)
+            return CGSize(width: 88 * 2 + 8, height: 88)
         } else {
-            return CGSize(width: 80, height: 80)
+            return CGSize(width: 88, height: 88)
         }
         
     }
@@ -60,6 +60,14 @@ extension CalculatorButtonItem: Hashable {
             return "operatorBackground"
         case .command:
             return "commandBackground"
+        }
+    }
+    
+    var foregroundColorName: String? {
+        if case .command = self {
+            return "commandText"
+        } else {
+            return nil
         }
     }
 }
