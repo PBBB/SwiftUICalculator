@@ -17,6 +17,7 @@ struct ContentView: View {
             Spacer()
             Text("0")
                 .font(.system(size: 76))
+                .foregroundColor(Color.primary)
                 .lineLimit(1)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 24)
@@ -90,7 +91,8 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group{
             ContentView()
-            ContentView().previewDevice("iPhone SE")
+//            ContentView().environment(\.colorScheme, .dark)
+//            ContentView().previewDevice("iPad Air (3rd generation)")
         }
     }
 }
