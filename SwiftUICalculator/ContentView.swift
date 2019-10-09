@@ -11,16 +11,21 @@ import SwiftUI
 struct ContentView: View {
     
     let scale: CGFloat = UIScreen.main.bounds.width / 414
+    @State private var brain: CalculatorBrain = .left("0")
     
     var body: some View {
         VStack (spacing: 12) {
             Spacer()
-            Text("0")
+            Text(brain.output)
                 .font(.system(size: 76))
+                .minimumScaleFactor(0.5)
                 .foregroundColor(Color.primary)
                 .lineLimit(1)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 24)
+//            Button("Test") {
+//                self.brain = .left("1.23")
+//            }
             CalculatorButtonPad()
 //                .padding(.bottom)
         }.scaleEffect(scale)
@@ -38,27 +43,12 @@ struct CalculatorButton: View {
     
     var body: some View {
         Button(action: action){
-//            Text(title)
-//                .font(.system(size: fontSize))
-//                .foregroundColor(foregroundColorName != nil ?  Color(foregroundColorName!) : Color.white)
-//                .frame(width: size.width, height: size.height)
-//                .background(Color(backgroundColorName))
-//                .cornerRadius(size.width / 2)
-            ZStack {
-                if (size.width == size.height) {
-                    Circle()
-                    .frame(width: size.width, height: size.height)
-                    .foregroundColor(Color(backgroundColorName))
-                } else {
-                    Rectangle()
-                    .frame(width: size.width, height: size.height)
-                    .foregroundColor(Color(backgroundColorName))
-                        .cornerRadius(size.width / 2)
-                }
-                Text(title)
-                    .font(.system(size: fontSize))
-                    .foregroundColor(foregroundColorName != nil ?  Color(foregroundColorName!) : Color.white)
-            }
+            Text(title)
+                .font(.system(size: fontSize))
+                .foregroundColor(foregroundColorName != nil ?  Color(foregroundColorName!) : Color.white)
+                .frame(width: size.width, height: size.height)
+                .background(Color(backgroundColorName))
+                .cornerRadius(size.width / 2)
         }
     }
 }
