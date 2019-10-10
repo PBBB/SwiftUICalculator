@@ -159,7 +159,12 @@ extension CalculatorBrain {
                 return .leftOp(left: String(Double(left)! / 100), op: .equal)
             //输入百分号之后，再直接输入数字，按理说应该处理的，这里没处理，所以还是能直接输入数字
             case .leftOp(left: let left, op: let op):
-                return .leftOpRight(left: left, op: op, right: String(Double(left)! / 100))
+                if op == .equal {
+                    return .leftOp(left: String(Double(left)! / 100), op: .equal)
+                } else {
+                    return .leftOpRight(left: left, op: op, right: String(Double(left)! / 100))
+                }
+                
             case .leftOpRight(left: let left, op: let op, right: let right):
                 return .leftOpRight(left: left, op: op, right: String(Double(right)! / 100))
             }
