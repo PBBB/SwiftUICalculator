@@ -13,20 +13,33 @@ struct ContentView: View {
     let scale: CGFloat = UIScreen.main.bounds.width / 414
 //    @State private var brain: CalculatorBrain = .left("0")
     @ObservedObject private var model = CalculatorModel()
+//    @EnvironmentObject var model: CalculatorModel
+    @State private var editingHistory = false
+    @State private var showingResult = false
     
     var body: some View {
         VStack (spacing: 12) {
             Spacer()
             Button("History: \(model.history.count)") {
-                print(self.model.history)
+                self.editingHistory = true
+            }.sheet(isPresented: $editingHistory) {
+//                HistoryView(model: self.model)
+                HistoryView(model: self.model, editingHistory: self.$editingHistory)
             }
-            Text(model.brain.output)
-                .font(.system(size: 76))
-                .minimumScaleFactor(0.5)
-                .foregroundColor(Color.primary)
-                .lineLimit(1)
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-//                .padding(.trailing, 24)
+            Button(action: {
+                self.showingResult = true
+            }){
+                Text(model.brain.output)
+//                    .font(.system(size: 76))
+                    .minimumScaleFactor(0.5)
+                    .foregroundColor(Color.primary)
+                    .lineLimit(1)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                //                .padding(.trailing, 24)
+            }.alert(isPresented: $showingResult) {
+                return Alert(title: Text("\(self.model.historyDetail)"), message: Text("\(self.model.brain.output)"))
+            }
+            
             CalculatorButtonPad(model: model)
 //                .padding(.bottom)
         }.scaleEffect(scale)
@@ -57,6 +70,7 @@ struct CalculatorButton: View {
 struct CalculatorButtonRow: View {
 //    @Binding var brain: CalculatorBrain
     var model: CalculatorModel
+//    @EnvironmentObject var model: CalculatorModel
     let row: [CalculatorButtonItem]
     var body: some View {
         HStack {
@@ -82,10 +96,44 @@ struct CalculatorButtonPad: View {
     }
 }
 
+struct HistoryView: View {
+    @ObservedObject var model: CalculatorModel
+    @Binding var editingHistory: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Button("Close"){
+                self.editingHistory = false
+            }
+            VStack{
+                
+                Spacer()
+                if model.totalCount == 0 {
+                    Text("No history")
+                } else {
+                    HStack {
+                        Text("History").font(.headline)
+                        Text("\(model.historyDetail)").lineLimit(nil)
+                    }
+                    HStack {
+                        Text("Output").font(.headline)
+                        Text("\(model.brain.output)").lineLimit(nil)
+                    }
+                    
+                    Slider(value: $model.slidingIndex, in: 0...Float(model.totalCount), step: 1)
+                }
+                Spacer()
+            }
+            .frame(maxWidth:.infinity, alignment: .center)
+        }.padding()
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Group{
+        return Group{
             ContentView()
+//            HistoryView(model: CalculatorModel())
 //            ContentView().environment(\.colorScheme, .dark)
 //            ContentView().previewDevice("iPad Air (3rd generation)")
         }

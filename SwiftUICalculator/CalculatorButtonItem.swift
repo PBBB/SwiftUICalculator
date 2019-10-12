@@ -70,4 +70,17 @@ extension CalculatorButtonItem: Hashable {
             return nil
         }
     }
+    
+    var description: String {
+        switch self {
+        case .dot:
+            return "."
+        case .digit(let number):
+            return "\(number)"
+        case .op(let op):
+            return op.rawValue
+        case .command(let command):
+            return command.rawValue
+        }
+    }
 }
