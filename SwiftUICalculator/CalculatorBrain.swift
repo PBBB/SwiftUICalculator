@@ -110,16 +110,16 @@ extension CalculatorBrain {
             if op == .equal {
                 switch oldOp {
                 case .plus:
-                    return .leftOp(left: String(Double(left)! + Double(left)!), op: .equal)
+                    return .leftOp(left: String((Double(left)! + Double(left)!).returnZeroIfIsEqualToZero()), op: .equal)
                 case .minus:
-                    return .leftOp(left: String(Double(left)! - Double(left)!), op: .equal)
+                    return .leftOp(left: String((Double(left)! - Double(left)!).returnZeroIfIsEqualToZero()), op: .equal)
                 case .multiply:
-                    return .leftOp(left: String(Double(left)! * Double(left)!), op: .equal)
+                    return .leftOp(left: String((Double(left)! * Double(left)!).returnZeroIfIsEqualToZero()), op: .equal)
                 case .divide:
                     if Double(left)! == 0 {
                         return .error
                     } else {
-                        return .leftOp(left: String(Double(left)! / Double(left)!), op: .equal)
+                        return .leftOp(left: String((Double(left)! / Double(left)!).returnZeroIfIsEqualToZero()), op: .equal)
                     }
                 case .equal:
                      return .leftOp(left: left, op: op)
@@ -130,16 +130,16 @@ extension CalculatorBrain {
         case .leftOpRight(let left, let oldOp, let right):
             switch oldOp {
             case .plus:
-                return .leftOp(left: String(Double(left)! + Double(right)!), op: op)
+                return .leftOp(left: String((Double(left)! + Double(right)!).returnZeroIfIsEqualToZero()), op: op)
             case .minus:
-                return .leftOp(left: String(Double(left)! - Double(right)!), op: op)
+                return .leftOp(left: String((Double(left)! - Double(right)!).returnZeroIfIsEqualToZero()), op: op)
             case .multiply:
-                return .leftOp(left: String(Double(left)! * Double(right)!), op: op)
+                return .leftOp(left: String((Double(left)! * Double(right)!).returnZeroIfIsEqualToZero()), op: op)
             case .divide:
                 if Double(right)! == 0 {
                     return .error
                 } else {
-                    return .leftOp(left: String(Double(left)! / Double(right)!), op: op)
+                    return .leftOp(left: String((Double(left)! / Double(right)!).returnZeroIfIsEqualToZero()), op: op)
                 }
             case .equal:
                  return .leftOp(left: left, op: op)
@@ -197,4 +197,14 @@ extension CalculatorBrain {
         }
     }
     
+}
+
+extension Double {
+    func returnZeroIfIsEqualToZero() -> Double {
+        if self == 0.0 {
+            return 0.0
+        } else {
+            return self
+        }
+    }
 }

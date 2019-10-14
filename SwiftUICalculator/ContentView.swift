@@ -30,14 +30,22 @@ struct ContentView: View {
                 self.showingResult = true
             }){
                 Text(model.brain.output)
-//                    .font(.system(size: 76))
+                    .font(.system(size: 76))
                     .minimumScaleFactor(0.5)
                     .foregroundColor(Color.primary)
                     .lineLimit(1)
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                 //                .padding(.trailing, 24)
             }.alert(isPresented: $showingResult) {
-                return Alert(title: Text("\(self.model.historyDetail)"), message: Text("\(self.model.brain.output)"))
+                
+                let primaryButton = Alert.Button.default(Text("Copy Result")) {
+                    let pasteboard = UIPasteboard.general
+                    pasteboard.string = self.model.brain.output
+                }
+                let cancelButton = Alert.Button.cancel()
+                
+                return Alert(title: Text("\(self.model.historyDetail)"), message: Text("\(self.model.brain.output)"), primaryButton: primaryButton, secondaryButton: cancelButton)
+
             }
             
             CalculatorButtonPad(model: model)
